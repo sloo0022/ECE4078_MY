@@ -64,7 +64,7 @@ def move_robot():
                         pibot.value = (0,0)
                         print("Target reached")
                         # clear targets
-                        target_ticks_left, target_ticks_right = None, None
+                        target_ticks_left, target_ticks_right = 0, 0
                         continue
                     
 
