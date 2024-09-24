@@ -54,6 +54,9 @@ def move_robot():
                 # TODO dra
                 # adjust for target ticks if specified 
                 if target_ticks_left != 0 and target_ticks_right != 0:
+                    print(f'Target ticks set at {target_ticks_left}, {target_ticks_right}')
+                    left_encoder.reset()
+                    right_encoder.reset()
                     # if robot reached target ticks
                     if left_encoder.value < target_ticks_left or right_encoder.value < target_ticks_right:
                         pid_right.setpoint = target_ticks_left
