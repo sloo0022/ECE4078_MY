@@ -53,7 +53,7 @@ def move_robot():
 
                 # TODO dra
                 # adjust for target ticks if specified 
-                if target_ticks_left is not None and target_ticks_right is not None:
+                if target_ticks_left != 0 and target_ticks_right != 0:
                     # if robot reached target ticks
                     if left_encoder.value < target_ticks_left or right_encoder.value < target_ticks_right:
                         pid_right.setpoint = target_ticks_left
@@ -149,8 +149,8 @@ kd = 0
 left_speed, right_speed = 0, 0
 motion = ''
 # TODO dra
-target_ticks_left = None
-target_ticks_right = None
+target_ticks_left = 0
+target_ticks_right = 0
 
 # Initialize the PiCamera
 picam2 = Picamera2()
