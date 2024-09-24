@@ -1,6 +1,7 @@
 from simple_pid import PID
+from simple_pid import PID
 from picamera2 import Picamera2
-from flask import Flask, Response, request
+from flask import Flask, Response, request, jsonify
 from gpiozero import Robot, Motor, DigitalInputDevice
 import io
 import time
@@ -40,11 +41,16 @@ def move_robot():
         ### with pid, left wheel is set as reference, and right wheel will try to match the encoder counter of left wheel
         ### pid only runs when robot moves forward or backward. Turning does not use pid
         else:
-            if (motion == 'stop') or (motion == 'turning'):
+            if (motion == 'stop'):
                 pibot.value = (left_speed, right_speed) 
                 left_encoder.reset()
                 right_encoder.reset()
-                flag_new_pid_cycle = True          
+                flag_new_pid_cycle = True   
+                  
+            elif (motion == 'turning'):
+                pibot.value = (left_speed, right_speed) 
+                flag_new_pid_cycle = True       
+
             else:
                 left_speed, right_speed = abs(left_speed), abs(right_speed)
                 if flag_new_pid_cycle:
@@ -54,8 +60,8 @@ def move_robot():
                 right_speed = pid_right(right_encoder.value)
                 if motion == 'forward': pibot.value = (left_speed, right_speed)
                 else: pibot.value = (-left_speed, -right_speed)
-                print('Value', left_encoder.value, right_encoder.value)
-                print('Speed', left_speed, right_speed)
+                # print('Value', left_encoder.value, right_encoder.value)
+                # print('Speed', left_speed, right_speed)
         time.sleep(0.005)
     
     
@@ -97,6 +103,12 @@ def move():
     
     # if 'time' in request.args:
 
+@app.route('/encoders', methods=['GET'])
+def get_encoders():
+    return jsonify({
+        "left_encoder": left_encoder.value,
+        "right_encoder": right_encoder.value
+    })
 
 # Constants
 in1 = 17 # may have to change this

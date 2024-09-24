@@ -40,11 +40,13 @@ def move_robot():
         ### with pid, left wheel is set as reference, and right wheel will try to match the encoder counter of left wheel
         ### pid only runs when robot moves forward or backward. Turning does not use pid
         else:
+            # if car stopping or turning
             if (motion == 'stop') or (motion == 'turning'):
                 pibot.value = (left_speed, right_speed) 
                 left_encoder.reset()
                 right_encoder.reset()
-                flag_new_pid_cycle = True          
+                flag_new_pid_cycle = True        
+            # else if car moving straight   
             else:
                 left_speed, right_speed = abs(left_speed), abs(right_speed)
                 if flag_new_pid_cycle:
@@ -53,10 +55,8 @@ def move_robot():
 
                 # TODO dra
                 # adjust for target ticks if specified 
-                if target_ticks_left != 0 and target_ticks_right != 0:
+                if target_ticks_left != 0 or target_ticks_right != 0:
                     print(f'Target ticks set at {target_ticks_left}, {target_ticks_right}')
-                    left_encoder.reset()
-                    right_encoder.reset()
                     # if robot reached target ticks
                     if left_encoder.value < target_ticks_left or right_encoder.value < target_ticks_right:
                         pid_right.setpoint = target_ticks_left
@@ -87,6 +87,7 @@ def set_target():
     global target_ticks_left, target_ticks_right
     target_ticks_left = int(request.args.get('left_ticks', default=target_ticks_left))
     target_ticks_right = int(request.args.get('right_ticks', default=target_ticks_right))
+    print(f"Target ticks set: Left - {target_ticks_left}, Right - {target_ticks_right}")
     return f"Target ticks set: Left - {target_ticks_left}, Right - {target_ticks_right}"
 
     
