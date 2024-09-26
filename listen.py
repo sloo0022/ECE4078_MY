@@ -103,6 +103,7 @@ def move():
     
     # if 'time' in request.args:
 
+# receive command to read from encoders 
 @app.route('/encoders', methods=['GET'])
 def get_encoders():
     return jsonify({
