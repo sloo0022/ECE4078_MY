@@ -124,7 +124,7 @@ ena = 18
 in3 = 23 # may have to change this
 in4 = 24 # may have to change this
 enb = 25
-enc_a = 26
+enc_a = 6
 enc_b = 16
 
 # Initialize robot and encoders
